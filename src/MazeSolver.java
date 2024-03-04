@@ -5,21 +5,38 @@ public class MazeSolver {
         boolean found = false;
         int r = 0;
         int c = 0;
-        while (!found && r < maze.length){
-            if (maze[r][c].equals(".")) {
-                coords.add(returnAsCoords(r+1, c+1));
-                maze[r][c] = "#";
-                
-                if (maze[r + 1][c] == ".") r = r+1;
-                else if (maze[r][c + 1] == ".") c = c+1;
-            }
+        while (!found){
             if (c == maze[0].length - 1 && r == maze.length - 1) found = true;
-            else {
-                if (c == maze[0].length - 1) c = 0;
-                else {
-                    c++;
+            if (maze[r][c].equals(".")) {
+                coords.add(returnAsCoords(r, c));
+                //make it so there's no chance of going back to an already found spot
+                maze[r][c] = "#";
+                boolean moved = false;
+                //needs to check all directions
+                if (r != maze.length - 1) {
+                    if (maze[r + 1][c].equals(".") && !moved) {
+                        r++;
+                        moved = true;
+                    }
                 }
-                r++;
+                if (r != 0){
+                    if (maze[r - 1][c].equals(".") && !moved) {
+                        r--;
+                        moved = true;
+                    }
+                }
+                if (c != maze[0].length - 1){
+                    if (maze[r][c + 1].equals(".") && !moved) {
+                        c++;
+                        moved = true;
+                    }
+                }
+                if (c != 0){
+                    if (maze[r][c-1].equals(".") && !moved) {
+                        c--;
+                        moved = true;
+                    }
+                }
             }
         }
         return coords;
