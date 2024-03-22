@@ -12,19 +12,17 @@ public class MazeSolver {
         int r = 0;
         int c = 0;
         while (!found){
-//            printMaze();
-//            System.out.println();
             if (c == maze[0].length - 1 && r == maze.length - 1) found = true;
             if (maze[r][c].equals(".")) {
+                //mark as visited
+                coords.add(returnAsCoords(r, c));
+                maze[r][c] = "V";
                 if (isDeadEnd(r, c)){
+//                    System.out.println("DEAD END --------------------");
+                    maze[r][c] = "X";
                     resetVisited();
                     r = 0;
                     c = 0;
-                }
-                else{
-                    //mark as visited
-                    coords.add(returnAsCoords(r, c));
-                    maze[r][c] = "V";
                 }
                 boolean moved = false;
                 //needs to check all directions
@@ -53,8 +51,8 @@ public class MazeSolver {
                     }
                 }
             }
-            printMaze();
-            System.out.println();
+//            printMaze();
+//            System.out.println();
         }
         return coords;
     }
@@ -64,7 +62,43 @@ public class MazeSolver {
     }
 
     public boolean isDeadEnd(int r, int c){
-        //help theres too many conditions omg omg mr das hellllllllllllp
+        int availPaths = 0;
+        if (r == maze.length - 1 && c == maze[0].length - 1) return false;
+        //checking for top to almost last row
+        if (r > 0 && r < maze.length - 1){
+            if (maze[r+1][c].equals(".")) availPaths++;
+            if (maze[r-1][c].equals(".")) availPaths++;
+            if (c != 0){
+                if (maze[r][c-1].equals(".")) availPaths++;
+            }
+            if (c != maze[0].length - 1){
+                if (maze[r][c+1].equals(".")) availPaths++;
+            }
+        }
+        //checking bottom row
+        if (r == maze.length - 1){
+            if (maze[r - 1][c].equals(".")) availPaths++;
+            if (c != 0){
+                if (maze[r][c-1].equals(".")) availPaths++;
+            }
+            if (c != maze[0].length - 1){
+                if (maze[r][c+1].equals(".")) availPaths++;
+            }
+        }
+
+        if (r == 0){
+            if (maze[r+1][c].equals(".")) availPaths++;
+            if (c != 0){
+                if (maze[r][c-1].equals(".")) availPaths++;
+            }
+            if (c != maze[0].length - 1){
+                if (maze[r][c+1].equals(".")) availPaths++;
+            }
+        }
+        if (availPaths == 0){
+            return true;
+        }
+        return false;
     }
 
     public void printMaze(){
@@ -86,6 +120,7 @@ public class MazeSolver {
         }
         //reset coords list
         coords = new ArrayList<String>();
+        coords.add("(0, 0)");
     }
 
 }
