@@ -17,10 +17,10 @@ public class MazeSolver {
                 //mark as visited
                 coords.add(returnAsCoords(r, c));
                 maze[r][c] = "V";
+                //check for dead ends, if dead, place with X and reset to beginning of the maze
                 if (isDeadEnd(r, c)){
-//                    System.out.println("DEAD END --------------------");
                     maze[r][c] = "X";
-                    resetVisited();
+                    reset();
                     r = 0;
                     c = 0;
                 }
@@ -51,8 +51,6 @@ public class MazeSolver {
                     }
                 }
             }
-//            printMaze();
-//            System.out.println();
         }
         return coords;
     }
@@ -64,7 +62,7 @@ public class MazeSolver {
     public boolean isDeadEnd(int r, int c){
         int availPaths = 0;
         if (r == maze.length - 1 && c == maze[0].length - 1) return false;
-        //checking for top to almost last row
+        //checking for middle rows
         if (r > 0 && r < maze.length - 1){
             if (maze[r+1][c].equals(".")) availPaths++;
             if (maze[r-1][c].equals(".")) availPaths++;
@@ -110,7 +108,7 @@ public class MazeSolver {
         }
     }
 
-    public void resetVisited() {
+    public void reset() {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
                 if (maze[i][j].equals("V")) {
